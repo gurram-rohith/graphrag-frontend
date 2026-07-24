@@ -221,7 +221,9 @@ function App() {
     setChatLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8001/api/query", {
+      const API_BASE_URL = "https://graphrag-backend-h852.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/api/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -333,7 +335,7 @@ function App() {
                 <label className="block text-[10px] font-mono text-slate-500 mb-1">BACKEND URL</label>
                 <div className="flex items-center space-x-1 bg-[#0c0d12] border border-[#1e2235] rounded px-2 py-1 text-xs font-mono text-slate-400">
                   <Server className="w-3.5 h-3.5 text-slate-600 flex-shrink-0" />
-                  <span className="truncate">http://localhost:8001</span>
+                  <span className="truncate">https://graphrag-backend-h852.onrender.com</span>
                 </div>
               </div>
             </div>
