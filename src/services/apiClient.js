@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = "https://graphrag-backend-h852.onrender.com";
+export const API_BASE_URL = "https://graphrag-backend-h852.onrender.com";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

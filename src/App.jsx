@@ -12,12 +12,14 @@ import {
   Database,
   Server,
   Copy,
-  Check
+  Check,
+  Trash2
 } from 'lucide-react';
 import { 
   ingestRepository, 
   getIngestionStatus, 
-  checkHealth 
+  checkHealth,
+  API_BASE_URL
 } from './services/apiClient';
 
 function App() {
@@ -56,6 +58,19 @@ function App() {
       }
     ];
   });
+
+  // --- CLEAR CHAT FUNCTION ---
+  const handleClearChat = () => {
+    const defaultMessage = [
+      {
+        role: 'assistant',
+        content: "Terminal session cleared.\n\nAsk questions about dependencies, function calls, class hierarchies, and structures in the panel below.",
+        timestamp: new Date()
+      }
+    ];
+    setChatHistory(defaultMessage);
+    localStorage.setItem('graphrag_chat_history', JSON.stringify(defaultMessage));
+  };
 
   useEffect(() => {
     localStorage.setItem('graphrag_display_name', displayName);
@@ -152,7 +167,6 @@ function App() {
   }, [ingestion.status]);
 
   // Handle ingestion request
-  // Handle ingestion request
   const handleIngestSubmit = async (e) => {
     e.preventDefault();
     if (!repoUrl.trim() || !projectId.trim()) return; 
@@ -221,7 +235,6 @@ function App() {
     setChatLoading(true);
 
     try {
-      const API_BASE_URL = "https://graphrag-backend-h852.onrender.com";
 
       const response = await fetch(`${API_BASE_URL}/api/query`, {
         method: "POST",
@@ -335,7 +348,7 @@ function App() {
                 <label className="block text-[10px] font-mono text-slate-500 mb-1">BACKEND URL</label>
                 <div className="flex items-center space-x-1 bg-[#0c0d12] border border-[#1e2235] rounded px-2 py-1 text-xs font-mono text-slate-400">
                   <Server className="w-3.5 h-3.5 text-slate-600 flex-shrink-0" />
-                  <span className="truncate">https://graphrag-backend-h852.onrender.com</span>
+                  <span className="truncate">{API_BASE_URL}</span>
                 </div>
               </div>
             </div>
@@ -412,8 +425,18 @@ function App() {
             <Terminal className="w-4 h-4 text-slate-500" />
             <span className="font-mono text-xs text-slate-400">bash - graphrag@assistant:~</span>
           </div>
-          <div className="text-xs font-mono text-slate-500 flex items-center">
-            <span className="bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 px-2 py-0.5 rounded text-[10px] font-bold">LLAMA-3.1-70B</span>
+          
+          {/* UPDATED HEADER: Clear Button + Badge */}
+          <div className="flex items-center space-x-3 text-xs font-mono text-slate-500">
+            <button 
+              onClick={handleClearChat}
+              className="flex items-center space-x-1 text-slate-500 hover:text-rose-400 transition-colors px-2 py-1 rounded hover:bg-[#1e2235]"
+              title="Clear terminal session"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">clear</span>
+            </button>
+            <span className="bg-indigo-950/40 text-indigo-400 border border-indigo-900/50 px-2 py-0.5 rounded text-[10px] font-bold">LLAMA 3.1B</span>
           </div>
         </div>
 
